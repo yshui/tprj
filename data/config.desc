@@ -1,0 +1,170 @@
+[Program/DelayStart]
+Type=Integer
+DefaultValue=0
+Description=Seconds sleep before fcitx really start
+
+[Program/ShareStateAmongWindow]
+Type=Enum
+DefaultValue=No
+EnumCount=3
+Enum0=No
+Enum1=All
+Enum2=PerProgram
+Description=Share State Among Window
+
+[Program/DefaultInputMethodState]
+Type=Enum
+DefaultValue=Close
+EnumCount=3
+Enum0=Close
+Enum1=Inactive
+Enum2=Active
+Description=Default Input Method State
+
+[Program/FirstRun]
+Type=Boolean
+DefaultValue=True
+Description=It's the first time Fcitx Start.
+
+[Output/HalfPuncAfterNumber]
+Type=Boolean
+DefaultValue=True
+Description=Use English Punc After a Number
+
+[Output/EnterAction]
+Type=Enum
+EnumCount=3
+Enum0=Nothing
+Enum1=Clean
+Enum2=Commit
+DefaultValue=Commit
+Description=Action after press enter
+
+[Output/RemindModeDisablePaging]
+Type=Boolean
+DefaultValue=True
+Description=Disable Paging in Remind Mode
+
+[Output/SendTextWhenSwitchEng]
+Type=Boolean
+DefaultValue=False
+Description=Send inputed Text if Switch to English Mode
+
+[Output/CandidateWordNumber]
+Type=Integer
+DefaultValue=5
+Description=Candidate Word Number
+
+[Output/PhraseTips]
+Type=Boolean
+DefaultValue=True
+Description=Give the tips of Phrase
+
+[Appearance/ShowInputWindowAfterTriggering]
+Type=Boolean
+DefaultValue=True
+Description=Show Input Window After Trigger Input Mode
+
+[Appearance/ShowPointAfterIndex]
+Type=Boolean
+DefaultValue=True
+Description=Show Point After Index
+
+[Appearance/ShowInputSpeed]
+Type=Boolean
+DefaultValue=True
+Description=Show Input Speed
+
+[Appearance/ShowVersion]
+Type=Boolean
+DefaultValue=True
+Description=Show Version
+
+[Appearance/HideInputWindowWhenOnlyPreeditString]
+Type=Boolean
+DefaultValue=False
+Description=Do not show input window if there is only preedit string
+
+[Appearance/HideInputWindowWhenOnlyOneCandidate]
+Type=Boolean
+DefaultValue=False
+Description=Do not show input window if there is one one candidate (Hide when only preedit string must be selected)
+
+[Hotkey/TriggerKey]
+Type=Hotkey
+DefaultValue=CTRL_SPACE
+Description=Hot key of Triggering Input Method
+
+[Hotkey/IMSwitchKey]
+Type=Boolean
+DefaultValue=True
+Description=Enable Left Ctrl + Left Shift to Switch Between Input Method
+
+[Hotkey/SwitchKey]
+Type=Enum
+EnumCount=5
+Enum0=R_CTRL
+Enum1=R_SHIFT
+Enum2=L_SHIFT
+Enum3=L_CTRL
+Enum4=Disabled
+DefaultValue=L_CTRL
+Description=Hotkey of Switching Chinese and English Mode
+
+[Hotkey/DoubleSwitchKey]
+Type=Boolean
+DefaultValue=False
+Description=Double click Switch Key to Change Mode
+
+[Hotkey/TimeInterval]
+Type=Integer
+DefaultValue=250
+Description=Interval of Two Key Input
+
+[Hotkey/VKSwitchKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_B
+Description=Hotkey of Switching Virtual Keyboard
+
+[Hotkey/RemindSwitchKey]
+Type=Hotkey
+DefaultValue=
+Description=Hotkey of Switching Remind Mode
+
+[Hotkey/FullWidthSwitchKey]
+Type=Hotkey
+DefaultValue=SHIFT_SPACE
+Description=Hotkey of Switching Full Width Character Mode
+
+[Hotkey/PuncSwitchKey]
+Type=Hotkey
+DefaultValue=ALT_SPACE
+Description=Hotkey of Switch Full Width Punc Mode
+
+[Hotkey/PrevPageKey]
+Type=Hotkey
+DefaultValue=-
+Description=Hotkey of Going Prev Page
+
+[Hotkey/NextPageKey]
+Type=Hotkey
+DefaultValue==
+Description=Hotkey of Going Next Page
+
+[Hotkey/SecondThirdCandWordKey]
+Type=String
+DefaultValue=SHIFT
+Description=Hotkey to Choose Second and Third Candidate Word
+
+[Hotkey/SaveAllKey]
+Type=Hotkey
+DefaultValue=CTRL_ALT_S
+Description=Hotkey of Saving All Config and Input History
+
+[Hotkey/SwitchPreedit]
+Type=Hotkey
+DefaultValue=CTRL_ALT_P
+Description=Hotkey of Switch Embeded Preedit
+
+[DescriptionFile]
+LocaleDomain=fcitx
