@@ -43,6 +43,9 @@ int main(){
 			"/org/freedesktop/UDisks",
 			NULL,
 			&err);
+	//Make sure udisks-daemon is started;
+	gchar **b;
+	uu_udisks_call_enumerate_devices_sync(ud, &b, NULL, &err);
 	g_signal_connect(ud,
 			"device-added",
 			G_CALLBACK(device_added),

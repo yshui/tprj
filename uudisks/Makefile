@@ -1,14 +1,14 @@
+all: uld ulm nda
 MAKEDEPEND = gcc -M $(CFLAGS) -o $*.d $<
 include $(SRCS:.c=.P)
 include uud.P uu.P
 SRCS = $(wildcard *.c)
 CFLAGS = `pkg-config gio-unix-2.0 --cflags`
 LDFLAGS = `pkg-config gio-unix-2.0 --libs`
-all: uld ulm nda
-uu.c uu.h: uu.xml
-	gdbus-codegen --generate-c-code=uu  --c-namespace=uu --interface-prefix=org.freedesktop uu.xml
-uud.c uud.h: uud.xml
-	gdbus-codegen --generate-c-code=uud  --c-namespace=uud --interface-prefix=org.freedesktop uud.xml
+uu.c uu.h:
+	gdbus-codegen --generate-c-code=uu  --c-namespace=uu --interface-prefix=org.freedesktop /usr/share/dbus-1/interfaces/org.freedesktop.UDisks.xml
+uud.c uud.h:
+	gdbus-codegen --generate-c-code=uud  --c-namespace=uud --interface-prefix=org.freedesktop /usr/share/dbus-1/interfaces/org.freedesktop.UDisks.Device.xml
 %.P : %.c
 	$(MAKEDEPEND)
 	@sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' < $*.d > $@; \
