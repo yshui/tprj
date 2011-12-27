@@ -1,0 +1,7 @@
+Usage:
+	nda:
+		Automounter, require udisks
+	ulm:
+		List devices mounted by current user, or all mounted devices if the program is run as root
+	uld [-d] <device-path> :
+		Unmount speacified device, and, if -d is speacified, detached it.
