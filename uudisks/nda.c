@@ -5,6 +5,11 @@
 #include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
+const gchar *null_option[1]={NULL};
+const gchar **get_filesystem_specific_options(const gchar *fstype){
+	//TODO Suport read options from config file
+	return null_option;
+}
 static void device_added(uuUDisks *ud, const gchar *dev){
 	GError *err = NULL;
 	uudUDisksDevice *uud = uud_udisks_device_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
@@ -14,23 +19,23 @@ static void device_added(uuUDisks *ud, const gchar *dev){
 			NULL,
 			&err);
 	if(err)goto end;
-	GVariant *res = g_dbus_proxy_get_cached_property(G_DBUS_PROXY(uud), "DeviceIsPartition");
-	gboolean b = g_variant_get_boolean(res);
+	gboolean b = uud_udisks_device_get_device_is_partition(uud);
 	if(b){
-		GVariant *res2 = g_dbus_proxy_get_cached_property(G_DBUS_PROXY(uud), "DeviceFile");
-		const gchar *b2 = g_variant_get_string(res2, NULL);
-		gchar *a;
-		gchar *b[1];
-		b[0]=NULL;
-		uud_udisks_device_call_filesystem_mount_sync(uud, "auto", b, &a, NULL, &err);
-		printf("Mounted at %s\n", a);
+		const gchar *b2 = uud_udisks_device_get_device_file(uud);
+		gchar *mount_path;
+		const gchar * const *mount_opt = null_option;
+		const gchar *fstype = "auto";
+		if(0 == strcmp("filesystem", uud_udisks_device_get_id_usage(uud))){
+			fstype = uud_udisks_device_get_id_type(uud);
+			mount_opt = get_filesystem_specific_options(fstype);
+		}
+		uud_udisks_device_call_filesystem_mount_sync(uud, fstype, mount_opt, &mount_path, NULL, &err);
+		printf("Mounted at %s\n", mount_path);
 		if(err)goto end;
-		g_variant_unref(res2);
-		g_free(a);
+		g_free(mount_path);
 	}
 end:
 	if(err)g_error_free(err);
-	if(res)g_variant_unref(res);
 	if(uud)g_object_unref(uud);
 }
 int main(){
@@ -50,11 +55,6 @@ int main(){
 			"device-added",
 			G_CALLBACK(device_added),
 			NULL);
-/*	g_signal_connect(ud,
-			"device-removed",
-			G_CALLBACK(device_removed),
-			NULL);
-*/
 	g_main_loop_run(loop);
 	g_main_loop_unref(loop);
 	g_object_unref(ud);

@@ -3,7 +3,7 @@ MAKEDEPEND = gcc -M $(CFLAGS) -o $*.d $<
 include $(SRCS:.c=.P)
 include uud.P uu.P
 SRCS = $(wildcard *.c)
-CFLAGS = `pkg-config gio-unix-2.0 --cflags`
+CFLAGS = `pkg-config gio-unix-2.0 --cflags` -O2
 LDFLAGS = `pkg-config gio-unix-2.0 --libs`
 uu.c uu.h:
 	gdbus-codegen --generate-c-code=uu  --c-namespace=uu --interface-prefix=org.freedesktop /usr/share/dbus-1/interfaces/org.freedesktop.UDisks.xml
