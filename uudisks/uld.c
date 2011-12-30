@@ -42,6 +42,7 @@ int main(int argc, const char **argv){
 			a,
 			NULL,
 			&err);
+	g_dbus_proxy_set_default_timeout(G_DBUS_PROXY(uud), 1000);
 	if(err)goto gerr;
 	g_free(a);
 //Check if df is mounted
@@ -67,6 +68,7 @@ int main(int argc, const char **argv){
 				&err);
 		if(err)goto gerr;
 		detachable = uud_udisks_device_get_drive_can_detach(puud);
+		g_dbus_proxy_set_default_timeout(G_DBUS_PROXY(puud), 1000);
 		if(detachable)
 			uud_udisks_device_call_drive_detach_sync(puud, null_option, NULL, &err);
 		if(err)goto gerr;
