@@ -3,7 +3,10 @@
 #include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ludisks.h"
+#include "uud.h"
+#include "uu.h"
+#include "defs.h"
+const gchar *const null_option[] = {NULL};
 int main(int argc, const char **argv){
 	g_type_init();
 	int i;
@@ -21,17 +24,51 @@ int main(int argc, const char **argv){
 		else df = argv[i];
 	}
 	if(!df)return 1;
-	gchar *a = get_obj_by_df(df, &err);
-	GDBusProxy *b = get_proxy_by_obj(a, &err);
-	g_free(a);
+	uudUDisksDevice *uud;
+	uuUDisks *uu;
+	uu = uu_udisks_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
+			G_DBUS_CONNECTION_FLAGS_NONE,
+			UDISKS_NAME,
+			UDISKS_OBJ,
+			NULL,
+			&err);
 	if(err)goto gerr;
-	do_unmount(b, &err);
+	gchar *a;
+       	uu_udisks_call_find_device_by_device_file_sync(uu, df, &a, NULL, &err);
+	if(err)goto gerr;
+	uud = uud_udisks_device_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
+			G_DBUS_CONNECTION_FLAGS_NONE,
+			UDISKS_NAME,
+			a,
+			NULL,
+			&err);
+	if(err)goto gerr;
+	g_free(a);
+//Check if df is mounted
+	gboolean ismounted = uud_udisks_device_get_device_is_mounted(uud);
+	if(!ismounted){
+		fprintf(stderr, "%s not mounted\n", df);
+		return 1;
+	}
+	uud_udisks_device_call_filesystem_unmount_sync(uud, null_option, NULL, &err);
 	if(err)goto gerr;
 	if(if_detach){
-		a = get_parent_obj(b);
-		GDBusProxy *c = get_proxy_by_obj(a, &err);
+		//Detach self first
+		gboolean detachable = uud_udisks_device_get_device_is_drive(uud) && uud_udisks_device_get_drive_can_detach(uud);
+		if(detachable)
+			uud_udisks_device_call_drive_detach_sync(uud, null_option, NULL, &err);
 		if(err)goto gerr;
-		do_detach(c, &err);
+		a = uud_udisks_device_get_partition_slave(uud);
+		uudUDisksDevice *puud = uud_udisks_device_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
+				G_DBUS_CONNECTION_FLAGS_NONE,
+				UDISKS_NAME,
+				a,
+				NULL,
+				&err);
+		if(err)goto gerr;
+		detachable = uud_udisks_device_get_drive_can_detach(puud);
+		if(detachable)
+			uud_udisks_device_call_drive_detach_sync(puud, null_option, NULL, &err);
 		if(err)goto gerr;
 	}
 	return 0;

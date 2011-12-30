@@ -5,6 +5,7 @@ include uud.P uu.P
 SRCS = $(wildcard *.c)
 CFLAGS = `pkg-config gio-unix-2.0 --cflags` -O2
 LDFLAGS = `pkg-config gio-unix-2.0 --libs`
+COMMON_OBJ = uu.o uud.o
 uu.c uu.h:
 	gdbus-codegen --generate-c-code=uu  --c-namespace=uu --interface-prefix=org.freedesktop /usr/share/dbus-1/interfaces/org.freedesktop.UDisks.xml
 uud.c uud.h:
@@ -15,12 +16,13 @@ uud.c uud.h:
 		rm -f $*.d; [ -s $@ ] || rm -f $@
 %.o: %.c
 	gcc -c $(CFLAGS) -o $@ $<
-nda: nda.o uu.o uud.o 
-	gcc nda.o uu.o uud.o $(CFLAGS) $(LDFLAGS) -o $@
-uld: uld.o ludisks.o
-	gcc uld.o ludisks.o $(CFLAGS) $(LDFLAGS) -o $@
-ulm: ulm.o ludisks.o
-	gcc ulm.o ludisks.o $(CFLASG) $(LDFLAGS) -o $@
+nda uld ulm: $(COMMON_OBJ)
+nda: nda.o
+	gcc nda.o $(COMMON_OBJ) $(CFLAGS) $(LDFLAGS) -o $@
+uld: uld.o
+	gcc uld.o $(COMMON_OBJ) $(CFLAGS) $(LDFLAGS) -o $@
+ulm: ulm.o
+	gcc ulm.o $(COMMON_OBJ) $(CFLASG) $(LDFLAGS) -o $@
 .PHONY: clean
 clean:
 	-rm $(SRCS:.c=.o) $(SRCS:.c=.P) uu.c uu.h uud.c uud.h uu.P uud.P nda uld ulm

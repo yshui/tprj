@@ -20,7 +20,7 @@ static void device_added(uuUDisks *ud, const gchar *dev){
 			&err);
 	if(err)goto end;
 	gboolean b = uud_udisks_device_get_device_is_partition(uud);
-	if(b){
+	if(b || (0 == strcmp("filesystem", uud_udisks_device_get_id_usage(uud)))){
 		const gchar *b2 = uud_udisks_device_get_device_file(uud);
 		gchar *mount_path;
 		const gchar * const *mount_opt = null_option;
