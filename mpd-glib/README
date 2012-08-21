@@ -1,0 +1,6 @@
+GOALS:
+
+* Build against newest libmpdclient.
+* Add support for newer mpd features.
+* GIR (should be easy).
+* Imporve code.
